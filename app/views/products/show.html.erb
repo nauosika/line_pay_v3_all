@@ -1,0 +1,15 @@
+<br>
+<h1><%= "#{@product.name}資訊" %></h1>
+<br>
+<div>
+  <ul class="list-group">
+    <small>商品名稱</small>
+    <li class="list-group-item"><%= @product.name %></li>
+    <small>商品價格</small>
+    <li class="list-group-item"><%= @product.price %></li>
+    <small>商品簡介</small>
+    <li class="list-group-item"><%= @product.description %></li>
+  </ul>
+</div>
+<br>
+<%= link_to "返回商品列表", products_path %>
