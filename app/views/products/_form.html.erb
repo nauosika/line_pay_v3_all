@@ -1,0 +1,27 @@
+<br>
+<br>
+
+<div class="form-row">
+<%= form_for(product) do |form|%>
+  <% if product.errors.any? %>
+      <ul>
+        <% product.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+  <% end %>
+  <%= form.label :name, "商品名稱" %>
+  <div class="col">
+    <%= form.text_field :name %>
+  </div>
+  <%= form.label :price, "商品價格" %>
+  <div class="col">
+    <%= form.text_field :price %>
+  </div>
+  <%= form.label :description, "商品描述" %>
+  <div class="col">
+    <%= form.text_area :description %>
+  </div>
+  <%= form.submit "送出" %>
+<% end %>
+</div>
