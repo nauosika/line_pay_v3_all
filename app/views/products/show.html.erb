@@ -12,4 +12,15 @@
   </ul>
 </div>
 <br>
-<%= link_to "返回商品列表", products_path %>
+<div><%= link_to "返回商品列表", products_path %></div><br>
+<div><%= link_to "商品銷售狀況", product_orders_path(@product) %></div>
+<br>
+<br>
+<div>
+    <p>購買處</p>
+    <%= form_tag product_orders_path(@product), method: :post do %>
+      <%= label :quantity, "請選擇數量" %>
+      <%= select_tag(:quantity, options_for_select([*1..10])) %> <br>
+      <%= submit_tag "購買", name: nil, class: "btn btn-primary" %>
+    <% end %>
+</div>

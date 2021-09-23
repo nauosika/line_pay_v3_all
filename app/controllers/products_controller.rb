@@ -6,6 +6,7 @@ class ProductsController < ApplicationController
   end
 
   def show
+    @order = @product.orders.new
   end
 
   def new
@@ -38,7 +39,6 @@ class ProductsController < ApplicationController
   end
 
   private
-
   def find_product
     @product = Product.find(params[:id])
   end
