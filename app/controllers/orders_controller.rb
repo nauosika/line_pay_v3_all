@@ -1,5 +1,6 @@
 class OrdersController < ApplicationController
   before_action :find_order_product
+  before_action :find_order, only: [:linerequest]
 
   def index
     @orders = @product.orders
@@ -18,9 +19,29 @@ class OrdersController < ApplicationController
     end
   end
 
+  def linerequest
+    response = JSON.parse(@order.get_response.body)
+    if response["returnMessage"] == "Success."
+      puts response
+      redirect_to response["info"]["paymentUrl"]["web"]
+    else
+      puts response
+    end
+  end
+
+  #transactionId
+  #paymentAccessToken
+
+  def confitmUrl
+  end
+
   private
   def find_order_product
     @product = Product.find(params[:product_id])
+  end
+
+  def find_order
+    @order = Order.find(params[:id])
   end
 
   def order_params
