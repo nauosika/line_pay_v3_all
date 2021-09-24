@@ -1,0 +1,24 @@
+<br>
+<h1><%= "#{@order.order_id}資訊" %></h1>
+<br>
+<div>
+  <ul class="list-group">
+    <small>購買商品</small>
+    <li class="list-group-item"><%= @order.name %></li>
+    <small>商品數量</small>
+    <li class="list-group-item"><%= @order.quantity %></li>
+    <small>訂單總價</small>
+    <li class="list-group-item"><%= @order.amount %></li>
+    <small>訂單狀態</small>
+    <li class="list-group-item"><%= @order.state %></li>
+  </ul>
+</div>
+<br>
+<br>
+<div>
+  <% if need_pay %>
+    <%= link_to "前往付款", linerequest_product_order_path, method: :post %>
+  <% end %>
+</div>
+<br>
+<div><%= link_to "返回訂單列表", product_orders_path(@product) %></div><br>
