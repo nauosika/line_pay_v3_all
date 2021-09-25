@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   before_action :find_order_product, except: [:linerequest]
-  before_action :find_order, only: [:linerequest]
+  before_action :find_order, only: [:linerequest, :linerefund]
 
   def index
     @orders = @product.orders
@@ -28,6 +28,18 @@ class OrdersController < ApplicationController
     end
   end
 
+  def linerefund
+    response = JSON.parse(@order.refund_response.body)
+    if response["returnMessage"] == "Success."
+      refundTransactionId = response["info"]["refundTransactionId"]
+      refundTransactionDate = response["info"]["refundTransactionDate"]
+      @order.set_refund_data(refundTransactionId, refundTransactionDate)
+      redirect_to product_order_path(@product, @order)
+    else
+      redirect_to product_order_path(@product, @order), data: { notice: "退款失敗" }
+    end
+  end
+
   private
   def find_order_product
     @product = Product.find(params[:product_id])
@@ -40,5 +52,4 @@ class OrdersController < ApplicationController
   def order_params
     params.permit(:quantity, :product_id)
   end
-
 end

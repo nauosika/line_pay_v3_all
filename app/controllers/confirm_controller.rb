@@ -5,7 +5,9 @@ class ConfirmController < ApplicationController
     transactionId = params[:transactionId]
     response = JSON.parse(@order.confirm_response(transactionId).body)
     if response["returnMessage"] == "Success."
-      @order.check; @order.save
+      regKey = response["info"]["regKey"]
+      @order.set_confirm_data(transactionId, regKey)
+      #sandbox 沒有regKey
       redirect_to  product_order_path(@product, @order)
     else
       redirect_to  product_path(@product)

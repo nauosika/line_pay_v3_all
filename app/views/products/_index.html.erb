@@ -20,7 +20,7 @@
       <td><%= product.description %></td>
       <td><%= link_to "GO!", product_path(product) %></td>
       <td><%= link_to "修改內容", edit_product_path(product) %></td>
-      <td><%= link_to "刪除商品", product_path(product), method: :delete, date:{confirm: "確認刪除?"} %></td>
+      <td><%= link_to "刪除商品", product_path(product), method: :delete, data: {confirm: "確認刪除?", "bootstrap-confirm": 'delete' } %></td>
     </tr>
     <% end %>
   </tbody>

@@ -13,11 +13,29 @@ class Order < ApplicationRecord
 
   aasm column: :state do
     state :pending, initial: true
-    state :confirmed
+    state :confirmed, :refunded
 
     event :check do
       transitions from: :pending, to: :confirmed
     end
+
+    event :cancel do
+      transitions from: :confirmed, to: :refunded
+    end
+  end
+
+  def set_confirm_data(transactionId, regKey)
+    self.transactionid = transactionId
+    self.regkey = regKey
+    self.check
+    self.save
+  end
+
+  def set_refund_data(refundTransactionId, refundTransactionDate)
+    self.refund_id = refundTransactionId.to_s
+    self.refund_date = refundTransactionDate
+    self.cancel
+    self.save
   end
 
   private
