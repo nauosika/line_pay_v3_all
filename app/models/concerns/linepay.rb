@@ -17,6 +17,14 @@ module Linepay
     self.get_response()
   end
 
+  def refund_response
+    self.refund_body()
+    self.prepare_refund_signature()
+    self.require_header()
+    @uri = URI.parse("https://sandbox-api-pay.line.me" + "#{@post_uri}")
+    self.get_response()
+  end
+
   private
   def requset_body
     @body = { amount: self.amount,
@@ -38,6 +46,10 @@ module Linepay
     }
   end
 
+  def refund_body
+    @bady = {refundAmount: self.amount}
+  end
+
   def get_nonce_and_secrect
     @nonce = SecureRandom.uuid
     @secrect = ENV["lines_pay_ChannelSecret"]
@@ -51,6 +63,11 @@ module Linepay
   def prepare_confirm_signature(transactionId)
     get_nonce_and_secrect()
     @post_uri = "/v3/payments/" + "#{transactionId}" + "/confirm"
+  end
+
+  def prepare_refund_signature
+    get_nonce_and_secrect()
+    @post_uri = "/v3/payments/" + "#{self.transactionid}" + "/refund"
   end
 
   def get_signature

@@ -5,9 +5,10 @@ Rails.application.routes.draw do
     resources :orders do
       member  do
         post 'linerequest'
+        post 'linerefund'
       end
     end
   end
 
-  get "confirm" , to: "confirm#check"
+  get "confirm", to: "confirm#check"
 end
