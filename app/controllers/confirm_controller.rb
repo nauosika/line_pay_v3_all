@@ -5,7 +5,7 @@ class ConfirmController < ApplicationController
     transactionId = params[:transactionId]
     response = JSON.parse(@order.confirm_response(transactionId).body)
     if response["returnMessage"] == "Success."
-      @order.check; @order.save
+      @order.set_transactionid(transactionId); @order.check; @order.save
       redirect_to  product_order_path(@product, @order)
     else
       redirect_to  product_path(@product)

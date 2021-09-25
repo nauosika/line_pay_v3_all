@@ -20,6 +20,10 @@ class Order < ApplicationRecord
     end
   end
 
+  def set_transactionid(transactionId)
+    self.transactionid = transactionId
+  end
+
   private
   def set_order
     order_id = "order#{SecureRandom.uuid}"
