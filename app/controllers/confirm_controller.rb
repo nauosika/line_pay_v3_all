@@ -1,16 +1,19 @@
 class ConfirmController < ApplicationController
-  def check
-    @order = Order.find_by(order_id: params[:orderId])
-    @product = Product.find_by(id: @order.product_id)
-    transactionId = params[:transactionId]
-    @con = JSON.parse(@order.confirm(transactionId).body)
+  before_action :set_order_and_product, only: [:check]
 
-    if @con["returnMessage"] == "Success."
-      @order.check
-      @order.save
+  def check
+    transactionId = params[:transactionId]
+    response = JSON.parse(@order.confirm_response(transactionId).body)
+    if response["returnMessage"] == "Success."
+      @order.check; @order.save
       redirect_to  product_order_path(@product, @order)
+    else
+      redirect_to  product_path(@product)
     end
   end
-end
 
-# rder82ce8313-1bf6-4d64-b133-13d4e136f27a
+  def set_order_and_product
+    @order = Order.find_by(order_id: params[:orderId])
+    @product = Product.find_by(id: @order.product_id)
+  end
+end

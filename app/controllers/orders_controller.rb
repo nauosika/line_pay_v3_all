@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :find_order_product
+  before_action :find_order_product, except: [:linerequest]
   before_action :find_order, only: [:linerequest]
 
   def index
@@ -11,7 +11,7 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = Product.find(params[:product_id]).orders.create(order_params)
+    @order = @product.orders.create(order_params)
     if @order.save
       redirect_to product_order_path(@product, @order), notice: "Order was successfully created."
     else
@@ -20,19 +20,12 @@ class OrdersController < ApplicationController
   end
 
   def linerequest
-    response = JSON.parse(@order.get_response.body)
+    response = JSON.parse(@order.request_response.body)
     if response["returnMessage"] == "Success."
-      puts response
       redirect_to response["info"]["paymentUrl"]["web"]
     else
-      puts response
+      redirect_to products_path
     end
-  end
-
-  #transactionId
-  #paymentAccessToken
-
-  def confitmUrl
   end
 
   private
