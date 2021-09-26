@@ -4,6 +4,11 @@ class ProductsController < ApplicationController
 
   def index
     @products = Product.all
+    # @proudcts = current_user.products
+  end
+
+  def own_products
+    @products = current_user.products
   end
 
   def show

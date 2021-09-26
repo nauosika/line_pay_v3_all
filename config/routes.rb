@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   root to: "home#index"
 
   resources :products do
+    collection  do
+        get :own_products
+      end
     resources :orders do
       member  do
         post 'linerequest'
