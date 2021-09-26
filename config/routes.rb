@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  root "products#index"
+  get 'home/index'
+  devise_for :users
+  root to: "home#index"
 
   resources :products do
     resources :orders do

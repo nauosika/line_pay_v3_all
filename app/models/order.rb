@@ -2,11 +2,11 @@ class Order < ApplicationRecord
   include Linepay
 
   belongs_to :product
+  belongs_to :user
 
   validates :quantity, presence: true, numericality: { only_integer: true }
 
   after_create :set_order
-
 
   #state
   include AASM
