@@ -16,7 +16,11 @@ class ConfirmController < ApplicationController
 
   private
   def set_order_and_product
-    @order = Order.find_by(order_id: params[:orderId])
-    @product = Product.find_by(id: @order.product_id)
+    begin
+      @order = Order.find_by(order_id: params[:orderId])
+      @product = Product.find_by(id: @order.product_id)
+    rescue
+      redirect_to products_path
+    end
   end
 end
