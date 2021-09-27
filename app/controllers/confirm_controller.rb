@@ -1,12 +1,14 @@
 class ConfirmController < ApplicationController
   before_action :set_order_and_product, only: [:check]
+  before_action :authenticate_user!
 
   def check
+    buyer_id = current_user.id
     transactionId = params[:transactionId]
     response = JSON.parse(@order.confirm_response(transactionId).body)
     if response["returnMessage"] == "Success."
       regKey = response["info"]["regKey"]
-      @order.set_confirm_data(transactionId, regKey)
+      @order.set_confirm_data(transactionId, regKey, buyer_id)
       #sandbox 沒有regKey
       redirect_to  product_order_path(@product, @order)
     else

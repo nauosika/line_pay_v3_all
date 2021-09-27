@@ -16,13 +16,19 @@
 <br>
 <br>
 <div>
-  <% if need_pay %>
-    <%= link_to "前往付款", linerequest_product_order_path, method: :post %>
-  <% elsif payed %>
-    <%= link_to "取消訂單並退款", linerefund_product_order_path, method: :post, data: { confirm: "退款後無法重複付款?!", "bootstrap-confirm": 'delete' } %>
-  <% else %>
-    此訂單無法異動。
+  <% if order_buyer? %>
+    <% if need_pay %>
+      <%= link_to "前往付款", linerequest_product_order_path, method: :post %>
+    <% elsif payed %>
+      <%= link_to "取消訂單並退款", linerefund_product_order_path, method: :post, data: { confirm: "退款後無法重複付款?!", "bootstrap-confirm": 'delete' } %>
+    <% else %>
+      此訂單無法異動。
+    <% end %>
   <% end %>
 </div>
 <br>
-<div><%= link_to "返回訂單列表", product_orders_path(@product) %></div><br>
+<% if order_owner? %>
+  <%= link_to "返回商品訂單列表", product_orders_path(@product) %><br>
+<% else order_buyer? %>
+  <%= link_to "返回購買訂單區", buylists_products_path %>
+<% end %>

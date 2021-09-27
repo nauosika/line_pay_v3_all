@@ -1,21 +1,34 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
-  before_action :find_product, only: [:show, :edit, :update, :destroy]
+  before_action :find_product, only: [:edit, :update, :destroy]
 
   def index
     @products = Product.all
   end
 
+  def buylists
+    @orders = current_user.buylists.includes([:product])
+  end
+
+  def own_products
+    @products = current_user.products
+  end
+
   def show
-    @order = @product.orders.new
+    begin
+      @product = Product.find(params[:id])
+      @order = current_user.buylists.new
+    rescue
+      redirect_to products_path
+    end
   end
 
   def new
-    @product = Product.new
+    @product = current_user.products.new
   end
 
   def create
-    @product = Product.new(product_params)
+    @product = current_user.products.new(product_params)
     if @product.save
       redirect_to product_path(@product), notice: "建立成功"
     else
@@ -41,11 +54,14 @@ class ProductsController < ApplicationController
 
   private
   def find_product
-    @product = Product.find(params[:id])
+    begin
+      @product = current_user.products.find(params[:id])
+    rescue
+      redirect_to products_path
+    end
   end
 
   def product_params
     params.require(:product).permit(:name, :price, :description)
   end
-
 end

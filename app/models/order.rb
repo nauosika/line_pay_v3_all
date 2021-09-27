@@ -24,9 +24,10 @@ class Order < ApplicationRecord
     end
   end
 
-  def set_confirm_data(transactionId, regKey)
+  def set_confirm_data(transactionId, regKey, buyer_id)
     self.transactionid = transactionId
     self.regkey = regKey
+    self.buyer_id = buyer_id
     self.check
     self.save
   end
@@ -47,5 +48,9 @@ class Order < ApplicationRecord
     self.packages_id = packages_id
     self.name = self.product.name
     self.price = self.product.price
+  end
+
+  def check_buyer
+    self.buyer_id == current_user.id
   end
 end

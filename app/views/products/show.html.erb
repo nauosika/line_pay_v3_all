@@ -13,14 +13,20 @@
 </div>
 <br>
 <div><%= link_to "返回商品列表", products_path %></div><br>
-<div><%= link_to "商品訂單列表", product_orders_path(@product) %></div>
+<div>
+  <% if owner?(@product) %>
+    <%= link_to "商品訂單列表", product_orders_path(@product) %>
+  <% end %>
+</div>
 <br>
 <br>
 <div>
+  <% if buyer?(@product) %>
     <p>購買處</p>
     <%= form_tag product_orders_path(@product), method: :post do %>
       <%= label :quantity, "請選擇數量" %>
       <%= select_tag(:quantity, options_for_select([*1..10])) %> <br>
       <%= submit_tag "購買", name: nil, class: "btn btn-primary" %>
     <% end %>
+  <% end %>
 </div>

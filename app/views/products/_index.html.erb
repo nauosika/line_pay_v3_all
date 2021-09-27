@@ -1,4 +1,3 @@
-<h1> 商品列表 </h1>
 <br>
 <br>
 <br>
@@ -18,12 +17,17 @@
       <td><%= product.name %></td>
       <td><%= product.price %></td>
       <td><%= product.description %></td>
-      <td><%= link_to "GO!", product_path(product) %></td>
-      <td><%= link_to "修改內容", edit_product_path(product) %></td>
-      <td><%= link_to "刪除商品", product_path(product), method: :delete, data: {confirm: "確認刪除?", "bootstrap-confirm": 'delete' } %></td>
+      <% if buyer?(product)%>
+        <td><%= link_to "GO!", product_path(product) %></td>
+      <% else%>
+        <td><%= link_to "檢視", product_path(product) %></td>
+      <% end %>
+      <% if owner?(product) %>
+        <td><%= link_to "修改內容", edit_product_path(product) %></td>
+        <td><%= link_to "刪除商品", product_path(product), method: :delete, data: {confirm: "確認刪除?", "bootstrap-confirm": 'delete' } %></td>
+      <% end %>
     </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to "新增商品", new_product_path %>

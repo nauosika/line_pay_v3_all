@@ -1,0 +1,21 @@
+<table class="table">
+  <thead>
+    <tr>
+      <td>商品名稱</td>
+      <td>訂單建立時間</td>
+      <td>訂單總價</td>
+      <td>商品數量</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @orders.each do |order|%>
+    <tr>
+      <td><%= order.name %></td>
+      <td><%= order.created_at&.strftime('%Y-%m-%d %H:%M') %></td>
+      <td><%= order.amount %></td>
+      <td><%= order.quantity %></td>
+      <td><%= link_to "查詢訂單狀態", product_order_path(order.product, order) %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
