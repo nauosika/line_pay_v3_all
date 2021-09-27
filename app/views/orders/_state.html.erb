@@ -1,0 +1,11 @@
+<div>
+  <% if order_buyer? %>
+    <% if need_pay %>
+      <%= link_to "前往付款", linerequest_product_order_path, method: :post %>
+    <% elsif payed %>
+      <%= link_to "取消訂單並退款", linerefund_product_order_path, method: :post, data: { confirm: "退款後無法重複付款?!", "bootstrap-confirm": 'delete' } %>
+    <% else %>
+      此訂單無法異動。
+    <% end %>
+  <% end %>
+</div>

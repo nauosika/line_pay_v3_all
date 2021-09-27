@@ -45,7 +45,7 @@ class OrdersController < ApplicationController
         redirect_to product_order_path(@product, @order), data: { notice: "退款失敗" }
       end
     rescue
-      redirect_to products_path
+      redirect_to products_path, data: { notice: "???" }
     end
   end
 

@@ -1,0 +1,7 @@
+<div>
+  <% if order_owner? %>
+    <%= link_to "返回商品訂單列表", product_orders_path(@product) %><br>
+  <% else order_buyer? %>
+    <%= link_to "返回購買訂單區", buylists_products_path %>
+  <% end %>
+</div>
