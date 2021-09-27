@@ -1,9 +1,14 @@
 class OrdersController < ApplicationController
+  before_action :authenticate_user!
   before_action :find_order_product, except: [:linerequest]
   before_action :find_order, only: [:linerequest, :linerefund]
 
   def index
-    @orders = @product.orders
+    begin
+      @orders = current_user.products.find(params[:product_id]).orders
+    rescue
+      redirect_to products_path
+    end
   end
 
   def show
@@ -11,11 +16,11 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = @product.orders.create(order_params)
+    @order = @product.user.orders.create(order_params)
     if @order.save
       redirect_to product_order_path(@product, @order), notice: "Order was successfully created."
     else
-      redirect_to products_path
+      redirect_to products_path, notice: "建立失敗"
     end
   end
 
@@ -29,14 +34,18 @@ class OrdersController < ApplicationController
   end
 
   def linerefund
-    response = JSON.parse(@order.refund_response.body)
-    if response["returnMessage"] == "Success."
-      refundTransactionId = response["info"]["refundTransactionId"]
-      refundTransactionDate = response["info"]["refundTransactionDate"]
-      @order.set_refund_data(refundTransactionId, refundTransactionDate)
-      redirect_to product_order_path(@product, @order)
-    else
-      redirect_to product_order_path(@product, @order), data: { notice: "退款失敗" }
+    begin @order.buyer_id == current_user.id
+      response = JSON.parse(@order.refund_response.body)
+      if response["returnMessage"] == "Success."
+        refundTransactionId = response["info"]["refundTransactionId"]
+        refundTransactionDate = response["info"]["refundTransactionDate"]
+        @order.set_refund_data(refundTransactionId, refundTransactionDate)
+        redirect_to product_order_path(@product, @order)
+      else
+        redirect_to product_order_path(@product, @order), data: { notice: "退款失敗" }
+      end
+    rescue
+      redirect_to products_path
     end
   end
 

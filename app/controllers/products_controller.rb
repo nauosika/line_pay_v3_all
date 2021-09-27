@@ -6,6 +6,10 @@ class ProductsController < ApplicationController
     @products = Product.all
   end
 
+  def buylists
+    @orders = current_user.buylists.includes([:product])
+  end
+
   def own_products
     @products = current_user.products
   end
