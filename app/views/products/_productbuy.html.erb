@@ -1,0 +1,10 @@
+<div>
+  <% if buyer?(@product) %>
+    <p>購買處</p>
+    <%= form_tag product_orders_path(@product), method: :post do %>
+      <%= label :quantity, "請選擇數量" %>
+      <%= select_tag(:quantity, options_for_select([*1..10])) %> <br>
+      <%= submit_tag "購買", name: nil, class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+</div>
