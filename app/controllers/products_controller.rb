@@ -7,7 +7,7 @@ class ProductsController < ApplicationController
   end
 
   def buylists
-    @orders = current_user.buylists.includes([:product]).order("id DESC")
+    @orders = current_user.buylists.includes([:product]).created_desc
   end
 
   def own_products
