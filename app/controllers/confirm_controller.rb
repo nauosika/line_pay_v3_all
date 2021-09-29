@@ -1,6 +1,7 @@
 class ConfirmController < ApplicationController
   before_action :set_order_and_product, only: [:check]
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
+  after_action :send_cofirm_mail, only: [:check]
 
   def check
     buyer_id = current_user.id
@@ -9,9 +10,6 @@ class ConfirmController < ApplicationController
     if response["returnMessage"] == "Success."
       regKey = response["info"]["regKey"]
       @order.set_confirm_data(transactionId, regKey, buyer_id)
-      NotifyMailer.buy_send_buyer(@order).deliver_now
-      NotifyMailer.buy_send_owner(@order).deliver_now
-      #sandbox 沒有regKey
       redirect_to  product_order_path(@product, @order)
     else
       redirect_to  product_path(@product)
@@ -26,5 +24,10 @@ class ConfirmController < ApplicationController
     rescue
       redirect_to products_path
     end
+  end
+
+  def send_cofirm_mail
+    NotifyMailer.confirm_owner_mail(@order).deliver_later
+    NotifyMailer.confirm_buyer_mail(@order).deliver_later
   end
 end

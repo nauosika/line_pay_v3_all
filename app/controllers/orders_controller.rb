@@ -2,6 +2,7 @@ class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_order_product, except: [:linerequest]
   before_action :find_order, only: [:linerequest, :linerefund]
+  after_action :send_refund_mail, only: [:linerefund]
 
   def index
     begin
@@ -60,5 +61,10 @@ class OrdersController < ApplicationController
 
   def order_params
     params.permit(:quantity, :product_id)
+  end
+
+  def send_refund_mail
+    NotifyMailer.refund_owner_mail(@order).deliver_later
+    NotifyMailer.refund_buyer_mail(@order).deliver_later
   end
 end
