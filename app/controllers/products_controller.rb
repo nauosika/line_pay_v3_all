@@ -3,11 +3,11 @@ class ProductsController < ApplicationController
   before_action :find_product, only: [:edit, :update, :destroy]
 
   def index
-    @products = Product.all
+    @products = Product.all.includes([:user])
   end
 
   def buylists
-    @orders = current_user.buylists.includes([:product])
+    @orders = current_user.buylists.includes([:product]).order("id DESC")
   end
 
   def own_products
