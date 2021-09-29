@@ -8,6 +8,8 @@ class Order < ApplicationRecord
 
   after_create :set_order
 
+  scope :created_desc, -> {order(id: :desc)}
+
   #state
   include AASM
 
@@ -24,17 +26,17 @@ class Order < ApplicationRecord
     end
   end
 
-  def set_confirm_data(transactionId, regKey, buyer_id)
-    self.transactionid = transactionId
-    self.regkey = regKey
-    self.buyer_id = buyer_id
+  def set_confirm_data(response, current_user_id)
+    self.transactionid = response["info"]["transactionId"]
+    self.regkey = response["info"]["regKey"]
+    self.buyer_id = current_user_id
     self.check
     self.save
   end
 
-  def set_refund_data(refundTransactionId, refundTransactionDate)
-    self.refund_id = refundTransactionId.to_s
-    self.refund_date = refundTransactionDate
+  def set_refund_data(response)
+    self.refund_id = response["info"]["refundTransactionId"]
+    self.refund_date = response["info"]["refundTransactionDate"]
     self.cancel
     self.save
   end
@@ -48,9 +50,5 @@ class Order < ApplicationRecord
     self.packages_id = packages_id
     self.name = self.product.name
     self.price = self.product.price
-  end
-
-  def check_buyer
-    self.buyer_id == current_user.id
   end
 end

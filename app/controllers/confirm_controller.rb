@@ -4,12 +4,10 @@ class ConfirmController < ApplicationController
   after_action :send_cofirm_mail, only: [:check]
 
   def check
-    buyer_id = current_user.id
     transactionId = params[:transactionId]
     response = JSON.parse(@order.confirm_response(transactionId).body)
     if response["returnMessage"] == "Success."
-      regKey = response["info"]["regKey"]
-      @order.set_confirm_data(transactionId, regKey, buyer_id)
+      @order.set_confirm_data(response, current_user.id)
       redirect_to  product_order_path(@product, @order)
     else
       redirect_to  product_path(@product)

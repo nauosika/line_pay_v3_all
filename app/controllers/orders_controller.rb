@@ -38,9 +38,7 @@ class OrdersController < ApplicationController
     begin @order.buyer_id == current_user.id
       response = JSON.parse(@order.refund_response.body)
       if response["returnMessage"] == "Success."
-        refundTransactionId = response["info"]["refundTransactionId"]
-        refundTransactionDate = response["info"]["refundTransactionDate"]
-        @order.set_refund_data(refundTransactionId, refundTransactionDate)
+        @order.set_refund_data(response)
         redirect_to product_order_path(@product, @order)
       else
         redirect_to product_order_path(@product, @order), data: { notice: "退款失敗" }
