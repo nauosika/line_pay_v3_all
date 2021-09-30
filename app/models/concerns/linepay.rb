@@ -36,8 +36,8 @@ module Linepay
                             name: self.name,
                             quantity: self.quantity,
                             price: self.price } ] } ],
-              redirectUrls: { confirmUrl: "http://127.0.0.1:3000/confirm",
-                              cancelUrl: "http://127.0.0.1:3000/cancel" } }
+              redirectUrls: { confirmUrl: "https://nauosika-line-test.herokuapp.com/confirm",
+                              cancelUrl: "https://nauosika-line-test.herokuapp.com/cancel" } }
   end
 
   def confirm_body
