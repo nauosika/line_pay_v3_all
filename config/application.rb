@@ -18,6 +18,5 @@ module LinePayApi
     #
     config.time_zone = "Taipei"
     # config.eager_load_paths << Rails.root.join("extras")
-    config.assets.initialize_on_precompile = false
   end
 end
