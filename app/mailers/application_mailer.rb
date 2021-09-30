@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'supports@mail.nauosika-line-test.herokuapp.com'
+  default from: "from@example.com"
   layout 'mailer'
 end
